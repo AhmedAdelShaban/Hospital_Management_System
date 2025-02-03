@@ -2,10 +2,15 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
+USER_TYPE = (
+    ("Doctor" , "Doctor"),
+    ("Patient" , "Patient"),
+)
 
 class User(AbstractUser):
     email = models.EmailField(max_length=500, unique=True)
     username = models.CharField(max_length=200 ,null=True, blank=True)
+    user_type = models.CharField(max_length=50 , choices=USER_TYPE , null=True , blank=True , default=None)
     
     
     USERNAME_FIELD = "email"
