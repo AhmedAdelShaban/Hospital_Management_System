@@ -20,7 +20,7 @@ class Doctor(models.Model):
     specialization = models.CharField(max_length=100, blank=True, null= True)
     qualification = models.CharField(max_length=100, blank=True, null= True)
     years_of_experience = models.CharField(max_length=100, blank=True, null= True)
-    next_available_appointment_date = models.CharField(max_length=100, blank=True, null= True)
+    next_available_appointment_date = models.DateTimeField(default=timezone.now , blank=True, null= True)
     
     
     def __str__(self):
