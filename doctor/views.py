@@ -17,3 +17,35 @@ def dashboard(request):
     }
     
     return render(request,'doctor/dashboard.html',context)
+
+
+
+@login_required
+def appointment(request):
+    doctor = doctor_models.Doctor.objects.get(user=request.user)
+    appointments = base_models.Appointment.objects.filter(doctor=doctor)
+
+    
+    context ={
+        'appointments': appointments,
+    }
+    
+    return render(request,'doctor/appointment.html',context)
+
+@login_required
+def appointment_detail(request, appointment_id):
+    doctor = doctor_models.Doctor.objects.get(user=request.user)
+    appointment = base_models.Appointment.objects.get(appointment_id=appointment_id ,doctor=doctor)
+    medical_record = base_models.MedicalRecord.objects.filter(appointment_id=appointment_id)
+    lab_test = base_models.LabTest.objects.filter(appointment_id=appointment_id)
+    prescription = base_models.Prescription.objects.filter(appointment_id=appointment_id)
+
+    
+    context ={
+        'appointment': appointment,
+        'medical_record': medical_record,
+        'lab_test': lab_test,
+        'prescription': prescription,
+    }
+    
+    return render(request,'doctor/appointment_detail.html',context)
