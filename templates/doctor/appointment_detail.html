@@ -21,8 +21,17 @@
                                 <p><span class="fw-semibold text-dark">Date:</span> {{appointment.appointment_date}}</p>
                                 <p>
                                     <span class="fw-semibold text-dark">Action:</span>
-                                    <a href="#" class="btn btn-outline-danger btn-sm">Cancel Appointment <i class="fas fa-trash ms-2"></i></a>
-                                    <a href="#" class="btn btn-outline-success btn-sm">Complete Appointment <i class="fas fa-check-circle ms-2"></i></a>
+                                    
+                                    {% if appointment.status == "Scheduled" %}
+                                        <a href="{% url 'doctor:cancel_appointment' appointment.appointment_id %}" class="btn btn-outline-danger btn-sm">Cancel Appointment <i class="fas fa-trash ms-2"></i></a>
+                                        <a href="{% url 'doctor:completed_appointment' appointment.appointment_id %}" class="btn btn-outline-success btn-sm">Complete Appointment <i class="fas fa-check-circle ms-2"></i></a>
+                                    {% endif %}
+                                    {% if appointment.status == "Cancelled" %}  
+                                         <a href="{% url 'doctor:activate_appointment' appointment.appointment_id %}" class="btn btn-success btn-sm">Activate Appointment <i class="fas fa-check-circle ms-2"></i></a>
+                                    {% endif %}
+                                    {% if appointment.status == "Completed" %}  
+                                        <a href="{% url 'doctor:activate_appointment' appointment.appointment_id %}" class="btn btn-success btn-sm">Complete <i class="fas fa-check-circle ms-2"></i></a>
+                                    {% endif %}
                                 </p>
                             </a>
                         </p>
