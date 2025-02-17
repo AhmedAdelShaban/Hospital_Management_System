@@ -185,3 +185,15 @@ def edit_prescription(request,appointment_id , prescription_id):
     
     messages.success(request, 'Prescription Updated  successfully')
     return redirect('doctor:appointment_detail', appointment.appointment_id) 
+
+@login_required
+def payments(request):
+    doctor = doctor_models.Doctor.objects.get(user=request.user)
+    payment = base_models.Billing.objects.filter(appointment__doctor=doctor)
+    
+    
+    context={
+        'payment': payment
+    }
+    
+    return render(request, 'doctor/payment.html', context)

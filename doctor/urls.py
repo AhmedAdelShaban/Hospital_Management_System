@@ -22,4 +22,8 @@ urlpatterns = [
     
     path('add_prescription/<appointment_id>/',views.add_prescription, name='add_prescription'),
     path('edit_prescription/<appointment_id>/<prescription_id>/',views.edit_prescription, name='edit_prescription'),
+    
+    path('payments/',views.payments, name='payments'),
+    
+    
 ]
