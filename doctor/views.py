@@ -14,7 +14,7 @@ def dashboard(request):
     context ={
         'appointments': appointments,
         'notifications': notifications,
-        'doctor':doctor
+      
     }
     
     return render(request,'doctor/dashboard.html',context)
@@ -29,6 +29,7 @@ def appointment(request):
     
     context ={
         'appointments': appointments,
+        
     }
     
     return render(request,'doctor/appointment.html',context)
@@ -47,6 +48,7 @@ def appointment_detail(request, appointment_id):
         'medical_records': medical_records,
         'lab_test': lab_test,
         'prescription': prescription,
+        
     }
     
     return render(request,'doctor/appointment_detail.html',context)
@@ -193,7 +195,8 @@ def payments(request):
     
     
     context={
-        'payment': payment
+        'payment': payment,
+        'doctor':doctor
     }
     
     return render(request, 'doctor/payment.html', context)
@@ -204,7 +207,8 @@ def notifications(request):
     notifications = doctor_models.Notification.objects.filter(doctor=doctor , seen=False)
     
     context ={
-        'notifications': notifications
+        'notifications': notifications,
+       
     }
     
     return render(request, 'doctor/notifications.html', context)
@@ -218,3 +222,41 @@ def mark_noti_seen(request , id):
     
     messages.success(request, 'Notification Mark Seen')
     return redirect('doctor:notifications')
+
+@login_required
+def profile(request):
+    doctor = doctor_models.Doctor.objects.get(user=request.user)
+    formatted_next_available_appointment_date = doctor.next_available_appointment_date.strftime('%Y-%m-%d')    
+    if request.method == 'POST':
+        full_name = request.POST.get('full_name')
+        image = request.FILES.get('image')
+        mobile = request.POST.get('mobile')
+        country = request.POST.get('country')
+        bio = request.POST.get('bio')
+        specialization = request.POST.get('specialization')
+        qualification = request.POST.get('qualification')
+        years_of_experience = request.POST.get('years_of_experience')
+        next_available_appointment_date = request.POST.get('next_available_appointment_date')
+            
+        doctor.full_name = full_name
+        doctor.mobile = mobile
+        doctor.country = country
+        doctor.bio = bio
+        doctor.specialization = specialization
+        doctor.qualification = qualification
+        doctor.years_of_experience = years_of_experience
+        doctor.next_available_appointment_date = next_available_appointment_date
+        
+        if image != None:
+            doctor.image = image
+            
+        doctor.save()
+        messages.success(request,'Profile Updated Successfully')
+        return redirect('doctor:profile')
+    
+    context ={
+        'doctor':doctor,
+        "formatted_next_available_appointment_date": formatted_next_available_appointment_date,
+        
+    }
+    return render(request,'doctor/profile.html',context)
